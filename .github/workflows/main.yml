@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install checkers
+        run: sudo apt-get install -y clang-tidy clang-format cppcheck
+      
+      - name: Install Qt
+        run: sudo apt-get install -y qt5-default
+
+      - name: Проверка
+        run: .github/lint.sh
+
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install GCC
+        run: sudo apt-get install -y build-essential
+      
+      - name: Install Qt
+        run: sudo apt-get install -y qt5-default
+
+      - name: Компиляция
+        run: ./.github/build.sh
