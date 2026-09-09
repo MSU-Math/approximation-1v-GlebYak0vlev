@@ -2,32 +2,41 @@
 #define WINDOW_H
 
 #include <QWidget>
+#include <vector>
 
 class Window : public QWidget
 {
     Q_OBJECT
 
-  private:
-    int func_id;
-    const char *f_name;
+private:
     double a;
     double b;
     int n;
-    double (*f)(double);
+    int k;
+    int disp_mode;
+    int scale_s;
+    int perturb_p;
+    double f_max;
 
-  public:
-    Window(QWidget *parent);
+    std::vector<double> x_nodes;
+    std::vector<double> f_nodes;
+    std::vector<double> a_parab;
+    std::vector<double> a_bessel;
 
-    QSize minimumSizeHint() const;
-    QSize sizeHint() const;
+    void rebuild();
+
+public:
+    explicit Window(QWidget *parent = nullptr);
+    ~Window() override;
+
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
 
     int parse_command_line(int argc, char *argv[]);
 
-  public slots:
-    void change_func();
-
-  protected:
-    void paintEvent(QPaintEvent *event);
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif
